@@ -1,18 +1,15 @@
+const Balance = require('../models/Balance');
+
 module.exports = {
-    name: 'balance',
-    description: 'Проверить ваш баланс',
-    async execute(message, args) {
-        const fs = require('fs');
-        const balanceFile = './balances.json';
-
-        function loadBalances() {
-            return JSON.parse(fs.readFileSync(balanceFile, 'utf8'));
-        }
-
-        const userId = message.author.id;
-        const balances = loadBalances();
-        const balance = balances[userId] || 100;
-
-        message.reply(`💰 Ваш баланс: **${balance}** монет.`);
-    },
+  name: 'balance',
+  description: 'Показать ваш баланс',
+  async execute(message) {
+    const userId = message.author.id;
+    let balance = await Balance.findOne({ userId });
+    if (!balance) {
+      balance = new Balance({ userId, coins: 100 });
+      await balance.save();
+    }
+    message.reply(`💰 Ваш баланс: **${balance.coins}** монет.`);
+  },
 };

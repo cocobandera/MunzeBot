@@ -1,21 +1,18 @@
-const fs = require('fs');
-const shopFile = './shop.json';
-
-function loadShop() {
-    return JSON.parse(fs.readFileSync(shopFile, 'utf8'));
-}
-
-module.exports = {
+const shopItems = {
+    танк: { name: "Танк", price: 100 },
+    зелье: { name: "Зелье здоровья", price: 10 },
+    меч: { name: "Меч", price: 50 }
+  };
+  
+  module.exports = {
     name: 'shop',
-    description: 'Показать список товаров в магазине',
+    description: 'Показать товары магазина',
     async execute(message) {
-        const shopItems = loadShop();
-        let shopList = '🛒 **Магазин**:\n';
-
-        for (const key in shopItems) {
-            shopList += `🔹 **${shopItems[key].name}** — ${shopItems[key].price} монет\n`;
-        }
-
-        message.reply(shopList);
+      let reply = '🛒 **Магазин:**\n';
+      for (const key in shopItems) {
+        reply += `🔹 **${shopItems[key].name}** — ${shopItems[key].price} монет\n`;
+      }
+      message.reply(reply);
     },
-};
+  };
+  
